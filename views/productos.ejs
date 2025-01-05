@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <table>
+        <thead>
+            <th>#</th>
+            <th>Código</th>
+            <th>Imagen</th>
+            <th>Desc.</th>
+            <th>Stock</th>
+            <th>Precio</th>
+        </thead>
+        <tbody>
+            <% list.forEach((product, i) => { %>
+                <tr>
+                    <td><%= i+1 %></td>
+                    <td>
+                        <a href="<%= product.link %>"><%= product.codigo %></a>
+                    </td>
+                    <td>
+                        <img src="<%= product.imgLink %>" alt="">
+                    </td>
+                </tr>
+            <% }) %>
+
+        </tbody>
+    </table>
+
+</body>
+</html>
