@@ -41,7 +41,7 @@ export class ProductoService {
 
     }
 
-    @Cron('* * 7 * * *', {
+    @Cron('0 0 7 * * *', {
         timeZone: 'America/Lima'
     })
     async saveProducts(){
