@@ -4,33 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/main.css">
+    
 </head>
 <body>
 
-    <table>
-        <thead>
+
+
+    <form class="flex gap-2 w-[80%] mx-auto mb-5 pt-5" method="get" action="">
+        <select class="bg-slate-100 border border-purple-600 rounded-md p-2 outline-none" name="category" id="categories">
+
+            <option value="">--TODOS--</option>
+
+            <% categories.forEach(cat => { %>
+                <option value="<%= cat.codigo %>" 
+                    <% if (filters.category === cat.codigo) { %>
+                        <%= 'selected' %> 
+                    <% } %>
+                    
+                    ><%= cat.nombre %></option>
+            <% }) %>
+        </select>
+
+        
+        <input placeholder="Descripción" type="text" class="bg-slate-100 border border-purple-600 rounded-md p-2 outline-none" name="product_desc" id="desc" value="<%= filters.desc %>">
+          
+
+        <button class="bg-green-500 text-white rounded-md py-2 px-5" type="submit" id="filter-button">Filtrar</button>
+    </form>
+
+    <table class="w-[80%] mx-auto">
+        <thead class="bg-purple-600 text-white [&>th]:p-2">
             <th>#</th>
             <th>Código</th>
             <th>Imagen</th>
             <th>Desc.</th>
             <th>Stock</th>
             <th>Precio</th>
+            <th>Promocion</th>
         </thead>
-        <tbody>
+        <tbody >
             <% list.forEach((product, i) => { %>
-                <tr>
-                    <td><%= i+1 %></td>
-                    <td>
-                        <a href="<%= product.link %>"><%= product.codigo %></a>
+                <tr class="[&>td]:border [&>td]:border-slate-400 ">
+                    <td class="text-center"><%= i+1 %></td>
+                    <td class="pl-2">
+                        <a class="text-blue-700 underline underline-offset-1" target="_blank" rel="noopener noreferrer" href="<%= product.link %>"><%= product.codigo %></a>
+                    </td>
+                    <td >
+                        <img class="w-[70px] block mx-auto" src="<%= product.imgLink %>" alt="">
                     </td>
                     <td>
-                        <img src="<%= product.imgLink %>" alt="">
+                        <span><%= product.desc %></span>
+                    </td>
+                    <td class="text-center">
+                        <span><%= product.stock %></span>
+                    </td>
+                    <td class="text-center">
+                        <span>$ <%= product.precio %></span>
+                    </td>
+                    <td class="text-center">
+                        <span><%= product.codPromo || '-' %></span>
                     </td>
                 </tr>
             <% }) %>
 
+            <% if (list.length === 0) { %>
+             <tr>
+                <td class="text-center" colspan="7">Sin datos para mostrar</td>
+             </tr>
+            <% } %>
         </tbody>
     </table>
+
+    
+
+    
 
 </body>
 </html>

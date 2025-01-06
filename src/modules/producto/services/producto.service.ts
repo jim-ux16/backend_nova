@@ -12,11 +12,25 @@ export class ProductoService {
         private readonly _prismaServ:PrismaService
     ){}
 
-    async findProducts(){
+    async findProducts(filters:any){
 
         try{
 
-            return await this._prismaServ.producto.findMany();
+            let where = {};
+
+            if(filters.category){
+                where['catId'] = {
+                    contains : filters.category
+                }
+            }
+
+            if(filters.desc){
+                where['desc'] = {contains: filters.desc}
+            }
+
+            return await this._prismaServ.producto.findMany({
+                where
+            });
 
         }catch(error){
             throw new InternalServerErrorException(error);
@@ -36,6 +50,12 @@ export class ProductoService {
 
                 const productListWithCat:IWebProduct[] = productList.map((prod:any) =>{
                     return {...prod, catId: cat.codigo}
+                });
+
+                await this._prismaServ.producto.deleteMany({
+                    where: {
+                        catId: cat.codigo
+                    }
                 })
 
                 await this._prismaServ.producto.createMany({

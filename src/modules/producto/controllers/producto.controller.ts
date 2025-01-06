@@ -1,6 +1,7 @@
 
-import { Controller, Get, Post, Render } from '@nestjs/common';
+import { Controller, Get, Post, Query, Render } from '@nestjs/common';
 import { ProductoService } from '../services/producto.service';
+import { categoryList } from '@core/data/categorias';
 
 @Controller('producto')
 export class ProductoController {
@@ -14,10 +15,20 @@ export class ProductoController {
     
     @Get()
     @Render('productos')
-    async root(){
+    async root(@Query('category') categoryFilter:string, @Query('product_desc') productDesc:string){
 
-        const list = await this._prodServ.findProducts();
-        return {list};
+        const filters = {};
+
+        if(categoryFilter){
+            filters['category'] = categoryFilter;
+        }
+
+        if(productDesc){
+            filters['desc'] = productDesc;
+        }
+
+        const list = await this._prodServ.findProducts(filters);
+        return {list, categories: categoryList, filters};
 
     }
 
