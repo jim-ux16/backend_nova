@@ -4,6 +4,7 @@ import puppeteer from 'puppeteer';
 import { IWebProduct, IWebProductWithoutCatId } from '../models/web-product';
 import { PrismaService } from '@modules/prisma/services/prisma.service';
 import * as chalk from 'chalk';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class ProductoService {
@@ -40,6 +41,9 @@ export class ProductoService {
 
     }
 
+    @Cron('* * 7 * * *', {
+        timeZone: 'America/Lima'
+    })
     async saveProducts(){
 
         for (const cat of categoryList) {
