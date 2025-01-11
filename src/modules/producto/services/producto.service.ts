@@ -85,7 +85,7 @@ export class ProductoService {
         /*---*/
         console.log(`${chalk.black.bgGreen('1')} ${chalk.bold('Starting page extractor - Cat: ' + productCode)}`)
         
-        const browser = await puppeteer.launch({slowMo: 200});
+        const browser = await puppeteer.launch({slowMo: 200, args: ['--no-sandbox']});
         const page = await browser.newPage();
 
         await page.authenticate({username: process.env.PAGE_USERNAME, password: process.env.PAGE_PASSWORD});
