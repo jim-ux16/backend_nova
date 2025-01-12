@@ -1,5 +1,5 @@
 import { categoryList } from '@core/data/categorias';
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import puppeteer from 'puppeteer';
 import { IWebProduct, IWebProductWithoutCatId } from '../models/web-product';
 import { PrismaService } from '@modules/prisma/services/prisma.service';
@@ -8,6 +8,8 @@ import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class ProductoService {
+
+    private readonly logger = new Logger(ProductoService.name);
 
     constructor(
         private readonly _prismaServ:PrismaService
@@ -41,10 +43,13 @@ export class ProductoService {
 
     }
 
-    @Cron('0 0 7 * * *', {
+    @Cron('0 7 * * *', {
         timeZone: 'America/Lima'
     })
     async saveProducts(){
+
+        this.logger.log('Ejecutando cron a las 07:05 pm');
+        
 
         for (const cat of categoryList) {
 
