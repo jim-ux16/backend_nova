@@ -1,5 +1,5 @@
 
-import { Controller, Get, Post, Query, Render } from '@nestjs/common';
+import { Controller, Get, InternalServerErrorException, Param, Post, Query, Render } from '@nestjs/common';
 import { ProductoService } from '../services/producto.service';
 import { categoryList } from '@core/data/categorias';
 
@@ -32,9 +32,12 @@ export class ProductoController {
 
     }
 
-    @Post()
-    loadProducts(){
-        return this._prodServ.saveProducts();
+    @Get(':cat_id')
+    async loadProductByCategory(@Param('cat_id') catId:string){
+
+        return this._prodServ.saveOneProductCategory(catId);
+
+        
     }
 
 }

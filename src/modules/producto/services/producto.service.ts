@@ -83,6 +83,33 @@ export class ProductoService {
 
     }
 
+    async saveOneProductCategory(productCode:string){
+
+        try{
+
+            const productList = await this.extractFromPage(productCode);
+
+            const productListWithCat:IWebProduct[] = productList.map((prod:any) =>{
+                return {...prod, catId: productCode}
+            });
+
+            await this._prismaServ.producto.deleteMany({
+                where: {
+                    catId: productCode
+                }
+            })
+
+            await this._prismaServ.producto.createMany({
+                data: productListWithCat
+            })
+
+
+        }catch(err){
+            throw new InternalServerErrorException(err);
+        }
+
+    }
+
 
     async extractFromPage(productCode:string):Promise<IWebProductWithoutCatId[]>{
 
@@ -90,7 +117,7 @@ export class ProductoService {
         /*---*/
         console.log(`${chalk.black.bgGreen('1')} ${chalk.bold('Starting page extractor - Cat: ' + productCode)}`)
         
-        const browser = await puppeteer.launch({slowMo: 200, args: ['--no-sandbox']});
+        const browser = await puppeteer.launch({slowMo: 200, headless: false, args: ['--no-sandbox']});
         const page = await browser.newPage();
 
         await page.authenticate({username: process.env.PAGE_USERNAME, password: process.env.PAGE_PASSWORD});
