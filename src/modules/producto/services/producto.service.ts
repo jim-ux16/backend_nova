@@ -58,7 +58,13 @@ export class ProductoService {
                 const productList = await this.extractFromPage(cat.codigo);
 
                 const productListWithCat:IWebProduct[] = productList.map((prod:any) =>{
-                    return {...prod, catId: cat.codigo}
+
+		    if(prod.precio < 7000){		 		    
+                    	return {...prod, catId: cat.codigo};
+		    }else{
+		    	console.log('Producto carisimo '+ prod.precio);
+		    }
+
                 });
 
                 await this._prismaServ.producto.deleteMany({
@@ -91,7 +97,7 @@ export class ProductoService {
 
             const productListWithCat:IWebProduct[] = productList.map((prod:any) =>{
                 return {...prod, catId: productCode}
-            });
+            }).filter((prod:any)=> { return (prod.precio < 7000) } );
 
             await this._prismaServ.producto.deleteMany({
                 where: {
@@ -115,9 +121,9 @@ export class ProductoService {
 
         
         /*---*/
-        console.log(`${chalk.black.bgGreen('1')} ${chalk.bold('Starting page extractor - Cat: ' + productCode)}`)
+        this.logger.log(`Starting extraction of category ${productCode}`);
         
-        const browser = await puppeteer.launch({slowMo: 200, headless: false, args: ['--no-sandbox']});
+        const browser = await puppeteer.launch({slowMo: 200, args: ['--no-sandbox']});
         const page = await browser.newPage();
 
         await page.authenticate({username: process.env.PAGE_USERNAME, password: process.env.PAGE_PASSWORD});
