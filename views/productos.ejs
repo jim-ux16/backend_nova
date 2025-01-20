@@ -12,12 +12,12 @@
     <link rel="stylesheet" href="/css/main.css">
     
 </head>
-<body>
+<body class="p-5">
 
 
 
-    <form class="flex gap-2 w-[80%] mx-auto mb-5 pt-5" method="get" action="">
-        <select class="bg-slate-100 border border-purple-600 rounded-md p-2 outline-none" name="category" id="categories">
+    <form class="flex gap-2 w-full mx-auto mb-5 flex-wrap" method="get" action="">
+        <select class="bg-slate-100 border border-purple-600 rounded-md p-2 outline-none w-full" name="category" id="categories">
 
             <option value="">--TODOS--</option>
 
@@ -32,55 +32,77 @@
         </select>
 
         
-        <input placeholder="Descripción" type="text" class="bg-slate-100 border border-purple-600 rounded-md p-2 outline-none" name="product_desc" id="desc" value="<%= filters.desc %>">
+        <input placeholder="Descripción" type="text" class="bg-slate-100 border border-purple-600 rounded-md p-2 outline-none grow" name="product_desc" id="desc" value="<%= filters.desc %>">
           
 
         <button class="bg-green-500 text-white rounded-md py-2 px-5" type="submit" id="filter-button">Filtrar</button>
     </form>
 
-    <table class="w-[80%] mx-auto">
-        <thead class="bg-purple-600 text-white [&>th]:p-2">
-            <th>#</th>
-            <th>Código</th>
-            <th>Imagen</th>
-            <th>Desc.</th>
-            <th>Stock</th>
-            <th>Precio</th>
-            <th>Promocion</th>
-        </thead>
-        <tbody >
-            <% list.forEach((product, i) => { %>
-                <tr class="[&>td]:border [&>td]:border-slate-400 ">
-                    <td class="text-center"><%= i+1 %></td>
-                    <td class="pl-2">
-                        <a class="text-blue-700 underline underline-offset-1" target="_blank" rel="noopener noreferrer" href="<%= product.link %>"><%= product.codigo %></a>
-                    </td>
-                    <td >
-                        <img class="w-[70px] block mx-auto" src="<%= product.imgLink %>" alt="">
-                    </td>
-                    <td>
-                        <span><%= product.desc %></span>
-                    </td>
-                    <td class="text-center">
-                        <span><%= product.stock %></span>
-                    </td>
-                    <td class="text-center">
-                        <span>$ <%= product.precio %></span>
-                    </td>
-                    <td class="text-center">
-                        <span><%= product.codPromo || '-' %></span>
-                    </td>
-                </tr>
-            <% }) %>
+    <div class="overflow-x-auto rounded-md mx-auto">
+        <table class="w-full">
+            <thead class="bg-purple-600 text-white">
+                <th class="p-2 border border-gray-700">#</th>
+                <th class="p-2 border border-gray-700">Código</th>
+                <th class="p-2 border border-gray-700">Imagen</th>
+                <th class="p-2 border border-gray-700">Desc.</th>
+                <th class="p-2 border border-gray-700">Stock</th>
+                <th class="p-2 border border-gray-700">Precio</th>
+                <th class="p-2 border border-gray-700">Promocion</th>
+                <th class="p-2 border border-gray-700">Acción</th>
+            </thead>
+            <tbody >
+                <% list.forEach((product, i) => { %>
+                    <tr class="[&>td]:border  dark:[&>td]:border-gray-700 text-gray-300">
+                        <td class="text-center"><%= i+1 %></td>
+                        <td class="pl-2">
+                            <a class="text-blue-700 dark:text-blue-400 underline underline-offset-1" target="_blank" rel="noopener noreferrer" href="<%= product.link %>"><%= product.codigo %></a>
+                        </td>
+                        <td >
+                            <img class="w-[70px] block mx-auto" src="<%= product.imgLink %>" alt="">
+                        </td>
+                        <td>
+                            <span><%= product.desc %></span>
+                        </td>
+                        <td class="text-center">
+                            <span><%= product.stock %></span>
+                        </td>
+                        <td class="text-center">
+                            <span>$ <%= product.precio %></span>
+                        </td>
+                        <td class="text-center">
+                            <span><%= product.codPromo || '-' %></span>
+                        </td>
+                        <td >
+                            <div class="flex justify-center items-center">
+                                <svg onclick="agregarCarrito('<%= product.codigo  %>')"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-center bg-yellow-700 p-2 rounded-full box-content cursor-pointer">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                </svg>
+                            </div>                      
+                         </td>
+                    </tr>
+                <% }) %>
+    
+                <% if (list.length === 0) { %>
+                 <tr>
+                    
+                        <td class="text-center" colspan="7">Sin datos para mostrar</td>
+                    
+                 </tr>
 
-            <% if (list.length === 0) { %>
-             <tr>
-                <td class="text-center" colspan="7">Sin datos para mostrar</td>
-             </tr>
-            <% } %>
-        </tbody>
-    </table>
+                 
+                <% } %>
+            </tbody>
+        </table>
 
+    </div>
+
+    <script>
+
+        function agregarCarrito(productCodigo){
+            console.log(productCodigo);    
+        }
+
+    </script>
     
 
     

@@ -4,4 +4,11 @@
 
 body{
     font-family: "Inter", serif;
+    
 }
+
+@media (prefers-color-scheme: dark) {
+    body{
+        background: #111827;
+    }
+  }
