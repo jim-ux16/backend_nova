@@ -1,10 +1,12 @@
 
-import { Controller, Get, InternalServerErrorException, Param, Post, Query, Render } from '@nestjs/common';
+import { Controller, Get, InternalServerErrorException, Param, Post, Query, Render, Logger } from '@nestjs/common';
 import { ProductoService } from '../services/producto.service';
 import { categoryList } from '@core/data/categorias';
 
 @Controller('producto')
 export class ProductoController {
+    
+    private readonly _logger = new Logger(ProductoController.name);
 
     constructor(
         private readonly _prodServ:ProductoService
@@ -34,7 +36,8 @@ export class ProductoController {
 
     @Get(':cat_id')
     async loadProductByCategory(@Param('cat_id') catId:string){
-
+	
+	this._logger.log(`requested cat: ${catId}`);
         return this._prodServ.saveOneProductCategory(catId);
 
         
